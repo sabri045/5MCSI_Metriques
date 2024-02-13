@@ -39,9 +39,7 @@ def get_paris_weather():
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
     
-@app.route("/histo/")
-def mongraphique():
-    return render_template("histo.html")
+
 
 @app.route('/')
 def hello_world():
