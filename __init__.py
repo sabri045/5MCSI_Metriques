@@ -38,6 +38,23 @@ def get_paris_weather():
         temp_day_value = list_element.get('main', {}).get('temp') - 273.15  # Conversion de Kelvin en °c 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
+
+@app.route('/commits/')
+def get_commit_minutes():
+    # URL de l'API GitHub pour les commits du projet
+    url = "https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits"
+
+    # Récupération des données depuis l'API GitHub
+    response = requests.get(url)
+    commits_data = response.json()
+
+    # Extraction des minutes de chaque commit
+    commits_minutes = [extract_minutes(commit['commit']['author']['date']) for commit in commits_data]
+
+    # Création du format JSON avec les minutes des commits
+    results = [{'minute': minute} for minute in commits_minutes]
+    
+    return jsonify(results=results)
     
 @app.route("/histogramme/")
 def monhisto():
