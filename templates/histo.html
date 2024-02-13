@@ -8,30 +8,33 @@
     <div id="chart_div"></div>
     <script>
       google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawColumnChart);
-      
-      function drawColumnChart() {
-        fetch('/paris/')
-          .then(response => response.json())
-          .then(data => {
-            var dataTable = new google.visualization.DataTable();
-            dataTable.addColumn('string', 'Date');
-            dataTable.addColumn('number', 'Température');
-            data.results.forEach(entry => {
-              var date = new Date(entry.Jour * 1000);
-              dataTable.addRow([date.toLocaleDateString(), entry.temp]);
-            });
+      google.charts.setOnLoadCallback(drawBackgroundColor);
+     function drawBackgroundColor() {
+    function drawChart(data) {
+    
+    var dataTable = new google.visualization.DataTable();
+    dataTable.addColumn('string', 'Date');
+    dataTable.addColumn('number', 'Valeur');
+    data.results.forEach(entry => {
+      var date = new Date(entry.Jour * 1000);
+      dataTable.addRow([date.toLocaleDateString(), entry.temp]);
+    });
+    
+    var options = {
+      title: 'Évolution des températures de Paris pour les 16 prochains jours',
+      legend: { position: 'none' },
+      bars: 'vertical' // Ajout de cette option pour indiquer qu'il s'agit d'un histogramme
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div')); // Utilisation de ColumnChart au lieu de LineChart
+    chart.draw(dataTable, options);
+  }
 
-            var options = {
-              title: 'Évolution des températures de Paris pour les 16 prochains jours',
-              legend: { position: 'none' },
-              bars: 'vertical' // Type de graphique en colonnes
-            };
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-            chart.draw(dataTable, options);
-          });
-      }
+  fetch('/tawarano/')
+    .then(response => response.json())
+    .then(data => {
+      drawChart(data);
+    })
+}
     </script>
   </body>
 </html>
