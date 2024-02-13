@@ -21,7 +21,7 @@ def meteo():
     
 @app.route("/contact/")
 def MaPremiereAPI():
-    return "<h2>Ma page de contact sabri</h2>"
+    return render_template("contact.html")
 
 @app.route("/rapport/")
 def mongraphique():
